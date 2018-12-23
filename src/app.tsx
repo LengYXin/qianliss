@@ -27,6 +27,7 @@ class App extends Component {
       'pages/index/index',
       'pages/shopping/index',
       'pages/user/index',
+      'pages/user_address/index',
 
     ],
     window: {

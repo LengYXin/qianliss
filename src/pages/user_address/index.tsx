@@ -1,4 +1,4 @@
-import { View } from '@tarojs/components';
+import { View,Input } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
 import './index.less';
@@ -33,8 +33,36 @@ class Index extends Component {
   onSearchBar() { }
   render() {
     return (
-      <View className='index'>
-        详情
+      <View className='address'>
+        <View className="box-input">
+          <View className="input-name">收货人</View>
+          <View className="input-one">
+            <Input name="pwd2" value="" placeholder="收货人"></Input>
+          </View>
+        </View>
+        <View className="box-input">
+          <View className="input-name">联系电话</View>
+          <View className="input-one">
+            <Input name="pwd2" value="" placeholder="请输入手机号"></Input>
+          </View>
+        </View>
+        <View className="box-input">
+          <View className="input-name">选择地区</View>
+          <View className="input-one">
+            {/* <Input name="pwd2" value="" placeholder="收货人"></Input> */}
+            <View className="input-add">
+               <View className="add add-province">选择省份</View>
+               <View className="add add-city">选择城市</View>
+               <View className="add add-region">选择地区</View>
+            </View>
+          </View>
+        </View>
+        <View className="box-input">
+          <View className="input-name">邮政编码</View>
+          <View className="input-one">
+            <Input name="pwd2" value="" placeholder="选填"></Input>
+          </View>
+        </View>
       </View>
     )
   }
