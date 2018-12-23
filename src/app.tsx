@@ -36,8 +36,8 @@ class App extends Component {
       navigationBarTextStyle: 'black'
     },
     tabBar: {
-      color: "#999999",
-      selectedColor: "#F74F4E",
+      color: "#666666",
+      selectedColor: "#43210D",
       list: [
         {
           pagePath: "pages/index/index",
