@@ -61,7 +61,7 @@ export default class ServerClass {
         }
         const res = await WXRequest.request(this.params)
         if (res.isSuccess) {
-            PagingData = res.data;
+            PagingData = res.data.items;
         }
         const diff = new Date().getTime() - startTime;
         // 等菊花转完

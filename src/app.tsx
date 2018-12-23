@@ -12,7 +12,6 @@ import { UserStore } from './store';
 class App extends Component {
   constructor(props) {
     super(props)
-    console.log(UserStore);
     UserStore.onLogin();
     UserStore.onGetUserInfo();
   }
@@ -25,13 +24,40 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/index/index'
+      'pages/index/index',
+      'pages/shopping/index',
+      'pages/user/index',
+
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: "#999999",
+      selectedColor: "#F74F4E",
+      list: [
+        {
+          pagePath: "pages/index/index",
+          text: "首页",
+          iconPath: "img/home.png",
+          selectedIconPath: "img/homeup.png"
+        },
+        {
+          pagePath: "pages/shopping/index",
+          text: "购物车",
+          iconPath: "img/che.png",
+          selectedIconPath: "img/cheup.png"
+        },
+        {
+          pagePath: "pages/user/index",
+          text: "我的",
+          iconPath: "img/user.png",
+          selectedIconPath: "img/userup.png"
+        }
+      ]
     }
   }
 

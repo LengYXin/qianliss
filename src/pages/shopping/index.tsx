@@ -1,9 +1,6 @@
 import { View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
-import { CommodityStore } from '../../store';
-import Loading from '../../components/loading';
-import SearchBar from './searchBar';
 import './index.less';
 @observer
 class Index extends Component {
@@ -16,24 +13,12 @@ class Index extends Component {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
   config: Config = {
-    navigationBarTitleText: '千里首铺',
+    navigationBarTitleText: '购物车',
     // 下拉刷新
-    enablePullDownRefresh: true,
-    backgroundTextStyle: "dark"
-  }
-  // 下拉刷新
-  async onPullDownRefresh() {
-    CommodityStore.onGetSkuCategoryRoot();
-    await CommodityStore.Paging.getPagingData(true)
-    Taro.stopPullDownRefresh()
-  }
-  // 滚动加载
-  onReachBottom() {
-    CommodityStore.Paging.getPagingData()
+    // enablePullDownRefresh: true,
+    // backgroundTextStyle: "dark"
   }
   componentWillMount() {
-    CommodityStore.onGetSkuCategoryRoot();
-    CommodityStore.Paging.getPagingData(true)
   }
   componentWillReact() {
   }
@@ -47,15 +32,9 @@ class Index extends Component {
   componentDidHide() { }
   onSearchBar() { }
   render() {
-    const loadingVis = CommodityStore.Paging.PagingLoading;
-    const dataList = [...CommodityStore.Paging.PagingData];
     return (
       <View className='index'>
-        <SearchBar />
-        {dataList.map(x => {
-          return <View>{x.text}</View>
-        })}
-        <Loading visible={loadingVis} />
+        购物车
       </View>
     )
   }
