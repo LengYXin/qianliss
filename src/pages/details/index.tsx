@@ -1,6 +1,10 @@
-import { View } from '@tarojs/components';
+import { Image, Swiper, SwiperItem, Text, View, Button, Navigator } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
+import { AtTag } from 'taro-ui';
+import 'taro-ui/dist/weapp/css/index.css';
+import { CommodityStore, ShoppingStore } from '../../store';
+import img from '../../img/che.png';
 import './index.less';
 @observer
 class Index extends Component {
@@ -15,26 +19,85 @@ class Index extends Component {
   config: Config = {
     navigationBarTitleText: '千里首铺',
     // 下拉刷新
-    // enablePullDownRefresh: true,
+    // enablePullDownRefresh: true, 
     // backgroundTextStyle: "dark"
   }
   componentWillMount() {
+    Taro.showLoading({ title: "加载中", mask: true })
   }
   componentWillReact() {
   }
 
-  componentDidMount() { }
+  async componentDidMount() {
 
-  componentWillUnmount() { }
+    await CommodityStore.onGetSkuDetail(this.$router.params.id);
+    Taro.hideLoading()
+  }
+
+  componentWillUnmount() {
+    CommodityStore.onSetDatails({})
+  }
 
   componentDidShow() { }
 
   componentDidHide() { }
-  onSearchBar() { }
+  onSetShopping() {
+    const { details } = CommodityStore;
+    ShoppingStore.onSetShopping({ count: 1, select: true, ...details })
+  }
   render() {
+    const { details } = CommodityStore;
+    let { text, price, origPrice, description, categoryText, thumbUrl, categoryId } = details;
+    const { total } = ShoppingStore;
+    const tag = CommodityStore.onGetTabText(categoryId);
+    price = parseFloat(price).toFixed(2);
+    origPrice = parseFloat(origPrice).toFixed(2);
     return (
-      <View className='index'>
-        详情
+      <View className='details' >
+        <Swiper
+          className="Swiper"
+          indicatorColor='#999'
+          indicatorActiveColor='#333'
+          // vertical
+          circular
+          indicatorDots
+          autoplay
+        >
+          <SwiperItem className="SwiperItem" itemId="1">
+            <Image
+              src={thumbUrl} mode="aspectFill"
+            />
+          </SwiperItem>
+        </Swiper>
+        <View className="at-row">
+          <View className="at-col row-text">
+            <Text>{text}</Text> <AtTag size='small'>{tag}</AtTag>
+          </View>
+          <View className="at-col row-price">
+            <View className="price">￥{price} </View>
+            <View className="origPrice">￥{origPrice}</View>
+          </View>
+        </View>
+        <View className="border"></View>
+        <View className='description'>
+          <View className="description-title">描述：</View>
+          <View className="description-text">
+            {description}
+          </View>
+        </View>
+        <View className="shopping">
+          <Navigator url="/pages/shopping/index" open-type="switchTab">
+            <View className="shopping-conut">
+              <View>{total}</View>
+              <Image
+                src={img} mode="aspectFill"
+              />
+            </View>
+          </Navigator>
+          <View className="shopping-btn">
+            <Button onClick={this.onSetShopping.bind(this)}>加入购物车</Button>
+          </View>
+        </View>
       </View>
     )
   }

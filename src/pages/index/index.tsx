@@ -2,9 +2,10 @@ import { View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
 import { CommodityStore } from '../../store';
-import Loading from '../../components/loading';
-import SearchBar from './searchBar';
 import './index.less';
+import SearchBar from './searchBar';
+import Tabs from './tabs';
+import Items from './items';
 @observer
 class Index extends Component {
 
@@ -32,8 +33,7 @@ class Index extends Component {
     CommodityStore.Paging.getPagingData()
   }
   componentWillMount() {
-    CommodityStore.onGetSkuCategoryRoot();
-    CommodityStore.Paging.getPagingData(true)
+   
   }
   componentWillReact() {
   }
@@ -45,17 +45,14 @@ class Index extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
-  onSearchBar() { }
   render() {
-    const loadingVis = CommodityStore.Paging.PagingLoading;
-    const dataList = [...CommodityStore.Paging.PagingData];
     return (
       <View className='index'>
-        <SearchBar />
-        {dataList.map(x => {
-          return <View>{x.text}</View>
-        })}
-        <Loading visible={loadingVis} />
+        <View className="title">
+          <SearchBar />
+          <Tabs />
+        </View>
+        <Items />
       </View>
     )
   }

@@ -2,7 +2,7 @@ import '@tarojs/async-await';
 import Taro, { Component, Config } from '@tarojs/taro';
 import './app.less';
 import Index from './pages/index';
-import { UserStore } from './store';
+import { UserStore, CommodityStore } from './store';
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
 // if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
@@ -26,6 +26,7 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/shopping/index',
+      'pages/details/index',
       'pages/user/index',
 
     ],
@@ -61,7 +62,10 @@ class App extends Component {
     }
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+    CommodityStore.onGetSkuCategoryRoot();
+    CommodityStore.Paging.getPagingData(true)
+  }
 
   componentDidShow() { }
 
