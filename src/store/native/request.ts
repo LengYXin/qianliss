@@ -86,7 +86,7 @@ export class WXRequestClass {
     compatibleData(data) {
         Object.keys(data).map(x => {
             const val = data[x]
-            if (val == null || val == undefined || val === '') {
+            if (val == null || val == undefined ) {
                 delete data[x]
             }
         })

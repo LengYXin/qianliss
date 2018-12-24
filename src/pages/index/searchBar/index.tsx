@@ -1,25 +1,13 @@
-import { View } from '@tarojs/components';
+import { Image, Text, View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
-import Taro, { Component, Config } from '@tarojs/taro';
+import Taro, { Component } from '@tarojs/taro';
+import { AtSearchBar } from 'taro-ui';
+import 'taro-ui/dist/weapp/css/index.css';
+import img from '../../../img/dizhi.png';
 import { CommodityStore } from '../../../store';
-import { AtSearchBar } from 'taro-ui'
 import './index.less';
 @observer
 class Index extends Component {
-  // 下拉刷新
-  async onPullDownRefresh() {
-    CommodityStore.onGetSkuCategoryRoot();
-    await CommodityStore.Paging.getPagingData(true)
-    Taro.stopPullDownRefresh()
-  }
-  // 滚动加载
-  onReachBottom() {
-    CommodityStore.Paging.getPagingData()
-  }
-  componentWillMount() {
-    CommodityStore.onGetSkuCategoryRoot();
-    CommodityStore.Paging.getPagingData(true)
-  }
   componentWillReact() {
   }
 
@@ -30,11 +18,30 @@ class Index extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
-  onSearchBar() { }
+  onChange(e) {
+    CommodityStore.onSetSearchBar(e);
+  }
+  onActionClick() {
+    CommodityStore.onSearch()
+  }
+  onConfirm() {
+    CommodityStore.onSearch()
+  }
   render() {
+    const searchBar = CommodityStore.searchBar;
     return (
-      <View className='index'>
-        <AtSearchBar value={""} onChange={this.onSearchBar.bind(this)} />
+      <View className='at-row at-search'>
+        <View className='at-address'>
+          <Image src={img} />
+          <Text>柳州城中店</Text>
+        </View>
+        <View className='at-col'>
+          <AtSearchBar className="search" value={searchBar}
+            onChange={this.onChange.bind(this)}
+            onConfirm={this.onConfirm.bind(this)}
+            onActionClick={this.onActionClick.bind(this)}
+          />
+        </View>
       </View>
     )
   }

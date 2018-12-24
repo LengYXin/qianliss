@@ -1,0 +1,178 @@
+.index {
+    min-height: 100vh;
+    background: #F8F8F8;
+    padding-bottom: 100px;
+}
+
+.address-item {
+    background: #FFF4EA;
+    .item-content__info-title {
+        font-size: 30px;
+        font-weight: 400;
+        color: rgba(34, 34, 34, 1);
+    }
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    padding: 30px 0;
+    background: #fff;
+    position: relative;
+    .select {
+        width: 55px;
+        height: 100%;
+        padding-left: 25px;
+        Image {
+            overflow: hidden;
+            border-radius: 100%;
+            background-color: #eeeeee;
+            width: 30px;
+            height: 30px;
+        }
+    }
+    .thumbUrl {
+        height: 160px;
+        width: 200px;
+        border-radius: 5px;
+        Image {
+            width: 100%;
+            height: 100%;
+            background-color: #eeeeee;
+        }
+    }
+    .data-info {
+        padding: 20px;
+        flex: 1;
+        >View {
+            height: 33.333%;
+            overflow: hidden;
+        }
+        .data-name {
+            font-size: 30px;
+            font-weight: 400;
+            color: rgba(34, 34, 34, 1);
+            line-height: 37px;
+        }
+        .data-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: rgba(255, 69, 69, 1);
+            line-height: 37px;
+            .origPrice {
+                padding-left: 10px;
+                font-size: 24px;
+                font-weight: 400;
+                text-decoration: line-through;
+                color: rgba(187, 187, 187, 1);
+            }
+        }
+    }
+    .update-count {
+        padding-right: 30px;
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        left: 30px;
+        right: 30px;
+        bottom: 0;
+        height: 1PX;
+        background-color: #eeeeee;
+        transform: scaleY(0.5);
+    }
+}
+
+.input-number {
+    &.at-input-number {
+        border: none;
+        border-radius: 0;
+        display: flex; // height: 34px;
+        align-items: center;
+        justify-items: center;
+    }
+    .at-input-number__input {
+        border: none;
+        line-height: 34px;
+    }
+    .at-input-number__btn {
+        color: #9E4C01 !important;
+        border-radius: 100%;
+        height: 34px;
+        width: 34px;
+        overflow: hidden;
+        border: 2px solid #9E4C01;
+        box-sizing: border-box;
+        padding: 0;
+        .at-icon {
+            font-size: 20px !important;
+        }
+    }
+}
+
+.btns {
+    height: 100px;
+    background: #FFFFFF;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    padding-left: 30px;
+    font-family: PingFangSC-Regular;
+    .select {
+        height: 100%;
+        width: 120px;
+        line-height: 100px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 400;
+        color: rgba(34, 34, 34, 1);
+        display: flex;
+        justify-items: center;
+        flex-direction: row;
+        align-items: center;
+        Image {
+            overflow: hidden;
+            border-radius: 100%;
+            background-color: #eeeeee;
+            height: 34px;
+            width: 34px;
+            margin-right: 10px;
+        }
+    }
+    .price {
+        flex: 1;
+        line-height: 100px;
+        font-size: 30px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(34, 34, 34, 1);
+        .price {
+            font-size: 36px;
+            font-weight: bold;
+            color: rgba(255, 69, 69, 1);
+        }
+    }
+    .btn {
+        width: 250px;
+        Button {
+            width: 100%;
+            height: 100%;
+            background: #9E4C01;
+            font-size: 30px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+            line-height: 100px;
+            border-radius: 0;
+            &::before,
+            &::after {
+                opacity: 0;
+            }
+        }
+    }
+}

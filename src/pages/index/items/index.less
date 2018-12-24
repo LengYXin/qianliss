@@ -1,0 +1,58 @@
+.items {
+    font-family: PingFangSC-Regular;
+    .item {
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        flex-direction: row;
+        padding: 30px;
+        position: relative;
+        .img {
+            height: 160px;
+            width: 200px;
+            border-radius: 5px;
+            overflow: hidden;
+            Image {
+                height: 100%;
+                width: 100%;
+                background-color: #eeeeee;
+            }
+        }
+        .data-info {
+            padding: 20px;
+            >View{
+                height: 33.333%;
+                overflow: hidden;
+            }
+            .data-name {
+                font-size: 30px;
+                font-weight: 400;
+                color: rgba(34, 34, 34, 1);
+                line-height: 37px;
+            }
+            .data-price {
+                font-size: 28px;
+                font-weight: bold;
+                color: rgba(255, 69, 69, 1);
+                line-height: 37px;
+                .origPrice {
+                    padding-left: 10px;
+                    font-size: 24px;
+                    font-weight: 400;
+                    text-decoration: line-through;
+                    color: rgba(187, 187, 187, 1);
+                }
+            }
+        }
+        &::after {
+            content: '';
+            position: absolute;
+            left: 30px;
+            right: 30px;
+            bottom: 0;
+            height: 1PX;
+            background-color: #eeeeee;
+            transform: scaleY(0.5);
+        }
+    }
+}

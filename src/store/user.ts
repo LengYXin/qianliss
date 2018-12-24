@@ -45,6 +45,7 @@ class User {
                 runInAction(() => {
                     this.userInfoWX = JSON.parse(res.rawData)
                     this.unAuthorized = false;
+                    this.isLogin = true;
                 })
             } catch (error) {
                 console.error(error);
