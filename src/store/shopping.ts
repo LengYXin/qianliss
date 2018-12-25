@@ -101,6 +101,7 @@ class Shopping {
             runInAction(() => {
                 this.couponList = data.items;
                 this.couponShow = true;
+                Taro.hideTabBar()
             })
             return true;
         }

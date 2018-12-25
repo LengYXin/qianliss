@@ -4,6 +4,7 @@ import Taro, { Component, Config } from '@tarojs/taro';
 import { AtInputNumber, AtList, AtListItem, AtTag, AtSwipeAction, AtFloatLayout, AtRadio } from 'taro-ui';
 import img from '../../img/select.png';
 import { CommodityStore, ShoppingStore, UserStore } from '../../store';
+import 'taro-ui/dist/weapp/css/index.css';
 import './index.less';
 @observer
 class Index extends Component {
@@ -139,16 +140,28 @@ class Index extends Component {
         </View>
         <AtFloatLayout
           isOpened={couponShow}
+          className="select-yhj"
           title='选择优惠券'
         >
-          <AtRadio
-            options={couponList.map((x: any) => {
-              return { label: x.text, desc: `金额：￥ ${x.amount.toFixed(2)}`, value: x.no }
-            })}
-            value={couponSelect}
-            onClick={this.onCouponsChange.bind(this)}
-          />
-          <Button onClick={this.onSettlement.bind(this)}>结算</Button>
+          <View className='at-row yhj-price'>
+            <View className='at-col left'>小计：</View>
+            <View className='at-col right'>￥{totalPrice} </View>
+          </View>
+          {couponList.map(x => {
+            return <View className='at-row yhj-item'>
+              <View className='at-col left'>{x.text}</View>
+              <View className='at-col right'>- <Text>￥{x.amount}</Text>  <Image className="select" src={img} mode="aspectFill" /></View>
+            </View>
+          })}
+
+          <View className="btns floatlayout">
+            <View className="price">
+              <Text className="price">￥{totalPrice} </Text>
+            </View>
+            <View className="btn" onClick={this.stopPropagation}>
+              <Button onClick={this.onSettlement.bind(this)}>结算</Button>
+            </View>
+          </View>
         </AtFloatLayout>
       </View>
 
