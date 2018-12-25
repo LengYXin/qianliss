@@ -36,7 +36,11 @@ class Index extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
-  onSearchBar() { }
+  onClickOrder(){
+    Taro.navigateTo({
+      url:'/pages/user_order/index?key='
+    })
+  }
   onClickAdd(){
     Taro.navigateTo({
       url:'/pages/user_address_edit/index?key='
@@ -60,6 +64,7 @@ class Index extends Component {
                 title='我的订单'
                 arrow='right'
                 thumb={order}
+                onClick={this.onClickOrder.bind(this)}
               />
               <AtListItem
                 className="list"

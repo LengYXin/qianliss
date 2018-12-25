@@ -2,6 +2,8 @@ import { View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
 import './index.less';
+import { AtTabs, AtTabsPane } from 'taro-ui';
+import Item from './item'
 @observer
 class Index extends Component {
 
@@ -31,11 +33,37 @@ class Index extends Component {
 
   componentDidHide() { }
   onSearchBar() { }
+  state = {
+    current: 0,
+  }
+  handleClick(value) {
+    console.log(value)
+    this.setState({
+      current: value
+    })
+  }
   render() {
+    const tabList = [{ title: "全部" }, { title: "待支付" }, { title: "待发货" }, { title: "待收货" }, { title: "已完成" }]
     return (
-      <View className='index'>
-        详情
-      </View>
+      <View className='user_order'>
+        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
+          <AtTabsPane current={this.state.current} index={0} >
+            <Item /><Item /><Item />
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={1}>
+            <Item />
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={2}>
+            <Item />
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={2}>
+            <Item />
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={2}>
+            <Item />
+          </AtTabsPane>
+        </AtTabs>
+      </View >
     )
   }
 }

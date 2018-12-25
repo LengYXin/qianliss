@@ -24,8 +24,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      //收货地址
-      'pages/user_address_edit/index',
+      
       //首页
       'pages/index/index',
       //购物车
@@ -36,7 +35,10 @@ class App extends Component {
       'pages/user/index',
       //新增地址
       'pages/user_address/index',
-      
+      //收货地址
+      'pages/user_address_edit/index',
+      //我的订单
+      'pages/user_order/index',
 
     ],
     window: {

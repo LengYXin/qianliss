@@ -1,0 +1,98 @@
+.order-box{
+    width: 100%;
+    font-family:PingFangSC-Regular;
+    .box-line{
+        width: 100%;
+        height: 16px;
+        background-color: #eee;
+    }
+    .box{
+        padding: 30px;
+        .head{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .head-left{
+                display: flex;
+                justify-content: flex-start;
+                align-items: flex-end;
+                .head-num{
+                    font-size:28px;
+                    line-height: 28px;
+                    font-weight:400;
+                    color:rgba(34,34,34,1);
+                    padding-right: 30px;
+                }
+                .head-time{
+                    font-size:24px;
+                    line-height: 24px;
+                    font-weight:400;
+                    color:rgba(204,204,204,1);
+                }
+            }
+            .head-state{
+                font-size:24px;
+                font-weight:400;
+                color:rgba(255,69,69,1);
+            }
+        }
+        .content{
+            width: 100%;
+            padding: 20px 0 20px 20px;
+            background-color: #F8F8F8;
+            box-sizing: border-box;
+            margin: 24px 0;
+            .content-img{
+                width: 150px;
+                height: 120px;
+                border: 1px solid #000;
+                margin-right: 15px;
+            }
+        }
+        .commodity{
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 25px;
+            margin-bottom: 20px;
+            .commodity-txt{
+                font-size:24px;
+                line-height: 24px;
+                font-weight:400;
+                color:rgba(34,34,34,1)
+            }
+            .money{
+                font-size:30px;
+                line-height: 30px;
+                font-weight:bold;
+                color:rgba(255,69,69,1);
+            }
+        }
+        .btn{
+            width: 100%;
+            position: relative;
+            height: 56px;
+            button{
+                position: absolute;
+                right: 0;
+                top: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width:140px;
+                height:56px;
+                border:2px solid rgba(158,76,1,1);
+                border-radius:28px;
+                font-size:28px;
+                font-weight:400;
+                color:rgba(158,76,1,1);
+                padding: 0;
+                line-height: 28px;
+                background-color: #fff !important;
+            }
+            button::before,button::after{
+                display: none;
+            }
+        }
+    }
+}

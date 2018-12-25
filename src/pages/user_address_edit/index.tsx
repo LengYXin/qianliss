@@ -2,7 +2,7 @@ import { View, Image } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
 import './index.less';
-import { AtSwipeAction } from 'taro-ui';
+import { AtSwipeAction, AtList, AtListItem } from 'taro-ui';
 import edit from '../../img/edit.png'
 import select from '../../img/select.png'
 @observer
@@ -34,25 +34,28 @@ class Index extends Component {
 
   componentDidHide() { }
   handleClick(e) {
-    console.log(e._relatedInfo.anchorTargetText)
+    console.log(e)
   }
   state = {
     radio: 0,
     editBgColor: false,
     editIndex: 0
   }
-  async onClickRadio(e,num) {
+  onClickRadio(num) {
     console.log(num)
     this.setState({
       radio: num
     })
   }
-  async onClickBgColor(e,num) {
+  onClickBgColor(num) {
     console.log(num)
     this.setState({
       editBgColor: !this.state.editBgColor,
       editIndex: num
     })
+  }
+  onAdd() {
+    Taro.navigateTo({ url: '/pages/user_address/index?key=' })
   }
   render() {
     const data = ["1", "2", "3", "4"]
@@ -61,7 +64,7 @@ class Index extends Component {
         <View className="edit-line"></View>
         {data.map((x, num) => {
           return <View key={num}>
-            <AtSwipeAction  onOpened={this.onClickBgColor.bind(this, num)} onClosed={this.onClickBgColor.bind(this, num)} onClick={this.handleClick.bind(this,num)} options={[
+            <AtSwipeAction onClick={this.handleClick.bind(this, num)} onOpened={this.onClickBgColor.bind(this, num)} onClosed={this.onClickBgColor.bind(this, num)} options={[
               {
                 text: '删除',
                 style: {
@@ -70,7 +73,7 @@ class Index extends Component {
               }
             ]}>
               <View className='edit-list'>
-                <View onClick={this.onClickRadio.bind(this,num)} className="list-left">
+                <View className="list-left" onClick={this.onClickRadio.bind(this, num)}>
                   {this.state.radio == num ? <Image className='ridio-yes' src={select} /> : <View className="left-ridio"></View>}
                   <View className="left-box">
                     <View className="box-name">名字<View className="phone">188888888888</View></View>
@@ -85,6 +88,11 @@ class Index extends Component {
             <View className="edit-line"></View>
           </View>
         })}
+        <View className="plus">
+          <AtList hasBorder={false} >
+            <AtListItem onClick={this.onAdd.bind(this)} hasBorder={false} title='+新增收货地址' arrow='right' />
+          </AtList>
+        </View>
       </View>
     )
   }
