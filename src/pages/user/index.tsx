@@ -39,7 +39,7 @@ class Index extends Component {
   onSearchBar() { }
   onClickAdd(){
     Taro.navigateTo({
-      url:'/pages/user_address/index?key='
+      url:'/pages/user_address_edit/index?key='
     })
   }
   render() {

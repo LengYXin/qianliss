@@ -13,7 +13,7 @@
             width: 25% !important;
             text-align: left;
             font-size: 30px;
-            line-height: 30px;
+            // line-height: 30px;
             color: #222;
         }
         .input-one{
@@ -48,5 +48,48 @@
                 font-size: 30px;
             }
         }
+    }
+    .box-textarea{
+        align-items: flex-start !important;
+        width: 100%;
+        padding: 24px 0 30px 0;
+        .input-name{
+            padding-top: 10px;
+        }
+        textarea{
+            padding: 0 !important;
+            margin: 0;
+            border: none;
+            height: 165px;
+            font-size: 30px;
+            line-height: 30px;
+            color: #666;
+            width: 100%;
+            .textarea-placeholder{
+                padding: 0 !important;
+                margin: 0;
+                height: 100%;
+                font-size: 30px;
+                line-height: 30px;
+                color: #aaa;
+            }
+        }
+    }
+    .box-btn{
+        margin-top: 108px;
+        width:690px;
+        height:100px;
+        background:rgba(158,76,1,1);
+        border-radius:50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 44px;
+        color: #FEFEFE;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+    }
+    button::before,button::after{
+        display: none;
     }
 }
