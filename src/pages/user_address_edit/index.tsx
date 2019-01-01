@@ -1,10 +1,9 @@
-import { View, Image } from '@tarojs/components';
+import { Button, Form, Input, Textarea, View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
+import { UserStore } from '../../store';
 import './index.less';
-import { AtSwipeAction, AtList, AtListItem } from 'taro-ui';
-import edit from '../../img/edit.png'
-import select from '../../img/select.png'
+
 @observer
 class Index extends Component {
 
@@ -21,6 +20,57 @@ class Index extends Component {
     // enablePullDownRefresh: true,
     // backgroundTextStyle: "dark"
   }
+  state = {
+    address: {
+      contactMan: "",
+      contactPhone: "",
+      fullValue: ""
+    },
+    // provinceList: ['美国', '中国', '巴西', '日本'],
+    // province: '选择省份',
+    // city: '选择城市',
+    // region: '选择地区',
+  }
+  async onSubmit(e) {
+    // , this.state.province, this.state.city, this.state.address, this.state.region
+    // console.log(e.detail.value)
+    // {isDefault:true,}
+    if (e.detail.value.contactMan == "" || e.detail.value.contactMan == null) {
+      return Taro.showToast({ title: "请输入收货人姓名", icon: "none" })
+    }
+    if (e.detail.value.contactPhone == "" || e.detail.value.contactPhone == null) {
+      return Taro.showToast({ title: "请输入联系电话", icon: "none" })
+    }
+    if (e.detail.value.fullValue == "" || e.detail.value.fullValue == null) {
+      return Taro.showToast({ title: "请输入详细地址", icon: "none" })
+    }
+    const key = this.$router.params.key;
+    if (key != -1) {
+      UserStore.onUpdateAddress({ ...UserStore.address[key], ...e.detail.value });
+    } else {
+      UserStore.onCreateAddress(e.detail.value);
+    }
+  }
+  // handleChange(e) {
+  //   this.setState({
+  //     address: e.detail.value
+  //   })
+  // }
+  // onChangeProvince(e) {
+  //   this.setState({
+  //     province: this.state.provinceList[e.detail.value]
+  //   })
+  // }
+  // onChangeCity(e) {
+  //   this.setState({
+  //     city: this.state.provinceList[e.detail.value]
+  //   })
+  // }
+  // onChangeRegion(e) {
+  //   this.setState({
+  //     region: this.state.provinceList[e.detail.value]
+  //   })
+  // }
   componentWillMount() {
   }
   componentWillReact() {
@@ -30,69 +80,79 @@ class Index extends Component {
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    const key = this.$router.params.key;
+    let address = {
+      contactMan: "",
+      contactPhone: "",
+      fullValue: ""
+    }
+    if (key != -1) {
+      address = { ...UserStore.address[key] }
+    }
+    this.setState({ address })
+  }
 
   componentDidHide() { }
-  handleClick(e) {
-    console.log(e)
-  }
-  state = {
-    radio: 0,
-    editBgColor: false,
-    editIndex: 0
-  }
-  onClickRadio(num) {
-    console.log(num)
-    this.setState({
-      radio: num
-    })
-  }
-  onClickBgColor(num) {
-    console.log(num)
-    this.setState({
-      editBgColor: !this.state.editBgColor,
-      editIndex: num
-    })
-  }
-  onAdd() {
-    Taro.navigateTo({ url: '/pages/user_address/index?key=' })
-  }
+  onSearchBar() { }
   render() {
-    const data = ["1", "2", "3", "4"]
+    // console.log(this.$router.params.key);
+
     return (
-      <View className='address_edit'>
-        <View className="edit-line"></View>
-        {data.map((x, num) => {
-          return <View key={num}>
-            <AtSwipeAction onClick={this.handleClick.bind(this, num)} onOpened={this.onClickBgColor.bind(this, num)} onClosed={this.onClickBgColor.bind(this, num)} options={[
-              {
-                text: '删除',
-                style: {
-                  backgroundColor: '#FF4949'
-                }
-              }
-            ]}>
-              <View className='edit-list'>
-                <View className="list-left" onClick={this.onClickRadio.bind(this, num)}>
-                  {this.state.radio == num ? <Image className='ridio-yes' src={select} /> : <View className="left-ridio"></View>}
-                  <View className="left-box">
-                    <View className="box-name">名字<View className="phone">188888888888</View></View>
-                    <View className="box-add">北京市朝阳区三元桥曙光西里甲10号无界空间曙光西里甲10号无界空间</View>
-                  </View>
-                </View>
-                <View className={`list-right ${this.state.editBgColor && this.state.editIndex == num ? "right-color" : ""}`}>
-                  <Image className="right-img" src={edit} />
-                </View>
-              </View>
-            </AtSwipeAction>
-            <View className="edit-line"></View>
+      <View className='address'>
+        <Form onSubmit={this.onSubmit}>
+          <View className="box-input">
+            <View className="input-name">收货人</View>
+            <View className="input-one">
+              <Input name="contactMan" value={this.state.address.contactMan} placeholder="收货人"></Input>
+            </View>
           </View>
-        })}
-        <View className="plus">
-          <AtList hasBorder={false} >
-            <AtListItem onClick={this.onAdd.bind(this)} hasBorder={false} title='+新增收货地址' arrow='right' />
-          </AtList>
-        </View>
+          <View className="box-input">
+            <View className="input-name">联系电话</View>
+            <View className="input-one">
+              <Input type="number" name="contactPhone" value={this.state.address.contactPhone} placeholder="请输入手机号"></Input>
+            </View>
+          </View>
+          {/* <View className="box-input">
+            <View className="input-name">选择地区</View>
+            <View className="input-one">
+              <View className="input-add">
+                <Picker mode='selector' range={this.state.provinceList} onChange={this.onChangeProvince}>
+                  <View className='picker add add-province'>
+                    {this.state.province}
+                  </View>
+                </Picker>
+                <Picker mode='selector' range={this.state.provinceList} onChange={this.onChangeCity}>
+                  <View className='picker add add-city'>
+                    {this.state.city}
+                  </View>
+                </Picker>
+                <Picker mode='selector' range={this.state.provinceList} onChange={this.onChangeRegion}>
+                  <View className='picker add add-region'>
+                    {this.state.region}
+                  </View>
+                </Picker>
+              </View>
+            </View>
+          </View> */}
+          <View className="box-input box-textarea">
+            <View className="input-name">详细地址</View>
+            <View className="input-one">
+              <Textarea
+                name="fullValue"
+                value={this.state.address.fullValue}
+                placeholder='详细地址'
+              />
+            </View>
+          </View>
+          {/* <View className="box-input">
+            <View className="input-name">邮政编码</View>
+            <View className="input-one">
+              <Input name="code" value="" placeholder="选填"></Input>
+            </View>
+          </View> */}
+          <Button className="box-btn" formType="submit">保存</Button>
+        </Form>
       </View>
     )
   }

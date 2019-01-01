@@ -1,9 +1,11 @@
 import { View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
+import Loading from '../../components/loading';
+import { OrderStore } from '../../store';
 import './index.less';
-import { AtTabs, AtTabsPane } from 'taro-ui';
-import Item from './item'
+import Item from './item';
+import Tabs from './tabs';
 @observer
 class Index extends Component {
 
@@ -17,8 +19,17 @@ class Index extends Component {
   config: Config = {
     navigationBarTitleText: '千里首铺',
     // 下拉刷新
-    // enablePullDownRefresh: true,
-    // backgroundTextStyle: "dark"
+    enablePullDownRefresh: true,
+    backgroundTextStyle: "dark"
+  }
+  // 下拉刷新
+  async onPullDownRefresh() {
+    await OrderStore.Paging.getPagingData(true)
+    Taro.stopPullDownRefresh()
+  }
+  // 滚动加载
+  onReachBottom() {
+    OrderStore.Paging.getPagingData()
   }
   componentWillMount() {
   }
@@ -29,40 +40,26 @@ class Index extends Component {
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    OrderStore.Paging.getPagingData(true)
+  }
 
   componentDidHide() { }
   onSearchBar() { }
-  state = {
-    current: 0,
-  }
-  handleClick(value) {
-    console.log(value)
-    this.setState({
-      current: value
-    })
-  }
   render() {
-    const tabList = [{ title: "全部" }, { title: "待支付" }, { title: "待发货" }, { title: "待收货" }, { title: "已完成" }]
+    const PagingData = [...OrderStore.Paging.PagingData];
+    const loadingVis = OrderStore.Paging.PagingLoading;
+    const dataNull = !(OrderStore.Paging.PagingLoading || OrderStore.Paging.PagingRefreshing) && PagingData.length <= 0;
     return (
       <View className='user_order'>
-        <AtTabs current={this.state.current} tabList={tabList} onClick={this.handleClick.bind(this)}>
-          <AtTabsPane current={this.state.current} index={0} >
-            <Item /><Item /><Item />
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={1}>
-            <Item />
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={2}>
-            <Item />
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={2}>
-            <Item />
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={2}>
-            <Item />
-          </AtTabsPane>
-        </AtTabs>
+        <View className='title'>
+          <Tabs />
+        </View>
+        {dataNull ? <View className="data-null">没有订单</View> : <View />}
+        {PagingData.map(x => {
+          return <Item key={x.id} data={x} />
+        })}
+        <Loading visible={loadingVis} />
       </View >
     )
   }

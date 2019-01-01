@@ -1,6 +1,10 @@
-import { View, Input, Picker, Form, Button, Textarea } from '@tarojs/components';
+import { Image, Navigator, View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component, Config } from '@tarojs/taro';
+import { AtList, AtListItem, AtSwipeAction } from 'taro-ui';
+import edit from '../../img/edit.png';
+import select from '../../img/select.png';
+import { UserStore } from '../../store';
 import './index.less';
 @observer
 class Index extends Component {
@@ -18,36 +22,6 @@ class Index extends Component {
     // enablePullDownRefresh: true,
     // backgroundTextStyle: "dark"
   }
-  state = {
-    address: '',
-    provinceList: ['美国', '中国', '巴西', '日本'],
-    province: '选择省份',
-    city: '选择城市',
-    region: '选择地区',
-  }
-  async onSubmit(e) {
-    console.log(e.detail.value, this.state.province, this.state.city, this.state.address, this.state.region)
-  }
-  handleChange(e) {
-    this.setState({
-      address: e.detail.value
-    })
-  }
-  onChangeProvince(e) {
-    this.setState({
-      province: this.state.provinceList[e.detail.value]
-    })
-  }
-  onChangeCity(e) {
-    this.setState({
-      city: this.state.provinceList[e.detail.value]
-    })
-  }
-  onChangeRegion(e) {
-    this.setState({
-      region: this.state.provinceList[e.detail.value]
-    })
-  }
   componentWillMount() {
   }
   componentWillReact() {
@@ -60,65 +34,70 @@ class Index extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
-  onSearchBar() { }
+  handleClick(e) {
+    console.log(e)
+  }
+  state = {
+    radio: 0,
+    editBgColor: false,
+    editIndex: 0
+  }
+  onClickRadio(num) {
+    UserStore.onSetDefaultAddress(UserStore.address[num])
+    this.forceUpdate();
+  }
+  onClickBgColor(num) {
+    this.setState({
+      editBgColor: !this.state.editBgColor,
+      editIndex: num
+    })
+  }
+  onAdd() {
+    Taro.navigateTo({ url: '/pages/user_address/index?key=' })
+  }
   render() {
+    // const data = ["1", "2", "3", "4"]
+    const { address, defaultAddress } = UserStore;
     return (
-      <View className='address'>
-        <Form onSubmit={this.onSubmit}>
-          <View className="box-input">
-            <View className="input-name">收货人</View>
-            <View className="input-one">
-              <Input name="name" value="" placeholder="收货人"></Input>
-            </View>
-          </View>
-          <View className="box-input">
-            <View className="input-name">联系电话</View>
-            <View className="input-one">
-              <Input name="phone" value="" placeholder="请输入手机号"></Input>
-            </View>
-          </View>
-          <View className="box-input">
-            <View className="input-name">选择地区</View>
-            <View className="input-one">
-              <View className="input-add">
-                <Picker mode='selector' range={this.state.provinceList} onChange={this.onChangeProvince}>
-                  <View className='picker add add-province'>
-                    {this.state.province}
+      <View className='address_edit'>
+        <View className="edit-line"></View>
+        {address.map((x, num) => {
+          return <View key={num}>
+            <AtSwipeAction onClick={this.handleClick.bind(this, num)} onOpened={this.onClickBgColor.bind(this, num)} onClosed={this.onClickBgColor.bind(this, num)} options={[
+              {
+                text: '删除',
+                style: {
+                  backgroundColor: '#FF4949'
+                }
+              }
+            ]}>
+              <View className='edit-list'>
+                <View className="list-left" onClick={this.onClickRadio.bind(this, num)}>
+                  {x.isDefault || defaultAddress.id == x.id ? <Image className='ridio-yes' src={select} /> : <View className="left-ridio"></View>}
+                  <View className="left-box">
+                    <View className="box-name">{x.contactMan}<View className="phone">{x.contactPhone}</View></View>
+                    <View className="box-add">{x.fullValue}</View>
                   </View>
-                </Picker>
-                <Picker mode='selector' range={this.state.provinceList} onChange={this.onChangeCity}>
-                  <View className='picker add add-city'>
-                    {this.state.city}
-                  </View>
-                </Picker>
-                <Picker mode='selector' range={this.state.provinceList} onChange={this.onChangeRegion}>
-                  <View className='picker add add-region'>
-                    {this.state.region}
-                  </View>
-                </Picker>
+                </View>
+
+                <View className={`list-right ${this.state.editBgColor && this.state.editIndex == num ? "right-color" : ""}`}>
+                  <Navigator url={`/pages/user_address_edit/index?key=${num}`}>
+                    <Image className="right-img" src={edit} />
+                  </Navigator>
+                </View>
               </View>
-            </View>
+
+            </AtSwipeAction>
+            <View className="edit-line"></View>
           </View>
-          <View className="box-input box-textarea">
-            <View className="input-name">详细地址</View>
-            <View className="input-one">
-              <Textarea
-                count={false}
-                value={this.state.address}
-                onInput={this.handleChange.bind(this)}
-                maxLength={100}
-                placeholder='你的问题是...'
-              />
-            </View>
-          </View>
-          <View className="box-input">
-            <View className="input-name">邮政编码</View>
-            <View className="input-one">
-              <Input name="code" value="" placeholder="选填"></Input>
-            </View>
-          </View>
-          <Button className="box-btn" formType="submit">保存</Button>
-        </Form>
+        })}
+        <View className="plus">
+          <AtList hasBorder={false} >
+            <Navigator url="/pages/user_address_edit/index?key=-1">
+              <AtListItem hasBorder={false} title='+新增收货地址' arrow='right' />
+            </Navigator>
+          </AtList>
+        </View>
       </View>
     )
   }

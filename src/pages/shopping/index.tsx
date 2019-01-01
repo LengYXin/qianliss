@@ -46,9 +46,12 @@ class Index extends Component {
   onDelete(index) {
     ShoppingStore.onDelete(index)
   }
-  onSettlement() {
+  onSettlement(coupon = true) {
     if (!UserStore.isLogin) {
       return Taro.showToast({ title: "请先登陆", icon: "none" })
+    }
+    if (!UserStore.defaultAddress.contactMan) {
+      return Taro.showToast({ title: "请设置收货地址", icon: "none" })
     }
     if (ShoppingStore.total <= 0) {
       return Taro.showToast({ title: "购物车没有商品", icon: "none" })
@@ -56,10 +59,14 @@ class Index extends Component {
     if (ShoppingStore.dataList.filter(x => x.select).length <= 0) {
       return Taro.showToast({ title: "未选择结算商品", icon: "none" })
     }
-    ShoppingStore.onSettlement()
+    ShoppingStore.onSettlement(coupon)
   }
   onCouponsChange(e) {
+    ShoppingStore.onCouponSelect(e);
+  }
 
+  onCouponShow() {
+    ShoppingStore.onCouponShow(false)
   }
   stopPropagation = (e) => {
     e.stopPropagation()
@@ -72,12 +79,12 @@ class Index extends Component {
     const couponShow = ShoppingStore.couponShow;
     const couponList = [...ShoppingStore.couponList];
     const couponSelect = ShoppingStore.couponSelect;
-
+    const address = UserStore.defaultAddress;
     return (
       <View className='index'>
         <AtList>
-          {isLogin ? <Navigator url="/pages/address/index">
-            <AtListItem className="address-item" title={'收件人：'} arrow='right' />
+          {isLogin ? <Navigator url="/pages/user_address/index">
+            <AtListItem className="address-item" title={'收件人：' + address.contactMan} arrow='right' />
           </Navigator> : <Navigator className="address-item" openType="switchTab" url="/pages/user/index">
               <AtListItem title='请登录' arrow='right' />
             </Navigator>}
@@ -135,11 +142,16 @@ class Index extends Component {
             <Text>合计</Text> <Text className="price">￥{totalPrice} </Text>
           </View>
           <View className="btn" onClick={this.stopPropagation}>
-            <Button onClick={this.onSettlement.bind(this)}>去结算</Button>
+            {isLogin ? <Button onClick={this.onSettlement.bind(this)}>去结算</Button> :
+              <Navigator openType="switchTab" url="/pages/user/index">
+                <Button >登录结算</Button>
+              </Navigator>}
+
           </View>
         </View>
         <AtFloatLayout
           isOpened={couponShow}
+          onClose={this.onCouponShow.bind(this)}
           className="select-yhj"
           title='选择优惠券'
         >
@@ -147,10 +159,12 @@ class Index extends Component {
             <View className='at-col left'>小计：</View>
             <View className='at-col right'>￥{totalPrice} </View>
           </View>
-          {couponList.map(x => {
-            return <View className='at-row yhj-item'>
+          {couponList.map((x, i) => {
+            return <View className='at-row yhj-item' key={i} onClick={this.onCouponsChange.bind(this, x)}>
               <View className='at-col left'>{x.text}</View>
-              <View className='at-col right'>- <Text>￥{x.amount}</Text>  <Image className="select" src={img} mode="aspectFill" /></View>
+              <View className='at-col right'>- <Text>￥{x.amountStr}</Text>
+                <Image className="select" src={x.no == couponSelect.no ? img : ''} mode="aspectFill" />
+              </View>
             </View>
           })}
 
@@ -159,7 +173,7 @@ class Index extends Component {
               <Text className="price">￥{totalPrice} </Text>
             </View>
             <View className="btn" onClick={this.stopPropagation}>
-              <Button onClick={this.onSettlement.bind(this)}>结算</Button>
+              <Button onClick={this.onSettlement.bind(this, false)}>结算</Button>
             </View>
           </View>
         </AtFloatLayout>

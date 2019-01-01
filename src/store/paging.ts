@@ -36,7 +36,7 @@ export default class ServerClass {
     @action.bound
     async getPagingData(refresh = false, showLoading = true) {
         // console.time("getPagingData");
-        // console.log(refresh, this.PagingLoading, this.PagingRefreshing);
+        console.log( this.PagingLoading, this.PagingRefreshing);
         if (this.PagingLoading || this.PagingRefreshing) {
             return
         }
@@ -46,9 +46,9 @@ export default class ServerClass {
             if (showLoading) {
                 Taro.showLoading({ title: "加载中", mask: true })
             }
-            if (!this.firstLoading) {
+            // if (!this.firstLoading) {
                 this.PagingRefreshing = true;
-            }
+            // }
             this.params.data.page = 1;
             this.endData = false;
         } else {
@@ -72,12 +72,9 @@ export default class ServerClass {
                     resole();
                 }, 600 - diff);
             })
-
         } else {
             this.runInAction(refresh, PagingData)
         }
-
-
     }
     /**
      * 设置数据状态

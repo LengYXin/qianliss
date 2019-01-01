@@ -64,6 +64,10 @@ class Commodity {
     @action.bound
     onSetCurrent(current) {
         this.current = current;
+        Taro.pageScrollTo({
+            scrollTop: 0,
+            duration: 0
+        })
         this.Paging.onReset({ categoryId: this.typeList[current].id });
         this.Paging.getPagingData(true);
     }

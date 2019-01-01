@@ -3,12 +3,13 @@ import { action, observable, runInAction, computed } from "mobx";
 import { WXRequest } from "./native/request";
 import find from 'lodash/find';
 import isArray from 'lodash/isArray';
-
+import { UserStore } from './user';
+import { OrderStore } from './order';
 class Shopping {
     constructor() {
         const dataList = Taro.getStorageSync(this.storaKey)
         if (isArray(dataList)) {
-            this.dataList = dataList;
+            this.onUpdateDataList(dataList)
         }
     }
     storaKey = "Shopping_DataList"
@@ -16,7 +17,10 @@ class Shopping {
     @observable dataList: any[] = [];
     @observable couponList: any[] = [];
     @observable couponShow = false;
-    @observable couponSelect = "";
+    @observable couponSelect = {
+        amount: 0,
+        no: ''
+    };
     // 商品数量
     @computed get total() {
         return this.dataList.length;
@@ -30,6 +34,7 @@ class Shopping {
                     price += x.price * x.count
                 }
             })
+            price -= this.couponSelect.amount;
             return parseFloat(price.toString()).toFixed(2);
         } catch (error) {
             this.onUpdateDataList([]);
@@ -43,12 +48,13 @@ class Shopping {
             this.onUpdateDataList([]);
         }
     }
+    /** 更新列表 */
     @action.bound
     onUpdateDataList(dataList) {
         this.dataList = dataList;
         Taro.setStorageSync(this.storaKey, [...this.dataList]);
     }
-    // 加入购物车
+    /** 加入购物车 */
     @action.bound
     onSetShopping(data) {
         const comm = find(this.dataList, ['id', data.id])
@@ -87,25 +93,89 @@ class Shopping {
         this.onUpdateDataList(dataList);
     }
     /** 结算 */
-    async onSettlement(coupon = this.couponSelect) {
-        if (coupon == "" && !this.couponShow) {
-            const isCoupon = await this.onGetCoupon();
-            console.log(isCoupon);
-        } else {
+    async onSettlement(coupon = true) {
+        Taro.showLoading({ title: "加载中", mask: true })
+        const orderData = {
+            contactMan: UserStore.defaultAddress.contactMan,
+            contactPhone: UserStore.defaultAddress.contactPhone,
+            address: UserStore.defaultAddress.fullValue,
+            skus: this.dataList.filter(x => x.select).map(x => {
+                return {
+                    id: x.id,
+                    count: x.count
+                }
+            })
         }
+        // 查询优惠卷
+        if (coupon) {
+            const isCoupon = await this.onGetCoupon();
+            if (isCoupon) {
+            } else {
+                // 无优惠卷结算
+                await this.onCreateSaleBill(orderData);
+            }
+        } else {
+            this.onCreateSaleBill(orderData)
+        }
+        Taro.hideLoading();
+    }
+    async onCreateSaleBill(orderData) {
+        // return console.log({
+        //     coupons: [{ ...this.couponSelect }],
+        //     ...orderData
+        // });
+        orderData = {
+            coupons: [{ ...this.couponSelect }],
+            ...orderData
+        }
+        this.onCouponShow(false)
+        this.onUpdateDataList(this.dataList.filter(x => !x.select));
+        // 直接结算
+        await OrderStore.onCreateSaleBill(orderData);
     }
     /** 优惠卷 */
+    @action.bound
     async onGetCoupon() {
+        this.couponList = [];
         const { isSuccess, data } = await WXRequest.request({ url: "/Api/cgi/List/Coupon" });
-        if (isSuccess && data.items.length) {
+        if (isSuccess && data.items.length > 0) {
             runInAction(() => {
-                this.couponList = data.items;
-                this.couponShow = true;
-                Taro.hideTabBar()
+                this.couponList = data.items.map(x => {
+                    return {
+                        ...x,
+                        amountStr: x.amount.toFixed(2)
+                    }
+                });
+                this.onCouponShow()
             })
             return true;
         }
         return false
+    }
+    /** 选择优惠卷 */
+    @action.bound
+    onCouponSelect(data) {
+        if (this.couponSelect.no == data.no) {
+            return this.couponSelect = {
+                amount: 0,
+                no: ''
+            }
+        }
+        this.couponSelect = data;
+    }
+    /** 显示优惠卷选择 */
+    @action.bound
+    onCouponShow(show = !this.couponShow) {
+        this.couponShow = show;
+        if (show) {
+            // Taro.hideTabBar()
+        } else {
+            // Taro.showTabBar()
+            this.couponSelect = {
+                amount: 0,
+                no: ''
+            }
+        }
     }
 }
 export const ShoppingStore = new Shopping();

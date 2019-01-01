@@ -1,34 +1,45 @@
-.user_order{
+.user_order {
     width: 100%;
-    font-family: PingFangSC-Regular;  
-        .at-tabs{
-            .at-tabs__header{
-                height: 74px;
-                padding: 0 44px;
-                .at-tabs__item{
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 0;
-                    height: 100%;
-                    width: 110px;
-                    font-size: 28px;
-                    color: #000;
-                    font-weight:400;
-                }
-                .at-tabs__item--active{
-                    color: #7B3B00;
-                }
-                .at-tabs__item--active::after{
-                    background-color: #7B3B00;
-                    height: 4px;
-                }
+    font-family: PingFangSC-Regular;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding-top: 90px;
+    .at-tabs {
+        .at-tabs__header {
+            // height: 74px;
+            // padding: 0 44px;
+            .at-tabs__item {
+                // display: flex;
+                // align-items: center;
+                // justify-content: center;
+                // padding: 0;
+                // height: 100%;
+                // width: 110px;
+                // font-size: 28px;
+                color: #000;
+                font-weight: 400;
+            }
+            .at-tabs__item--active {
+                color: #7B3B00;
+            }
+            .at-tabs__item--active::after {
+                background-color: #7B3B00;
+                height: 4px;
             }
         }
-        .tabs-item{
-            // width: 110px;
-            text-align: center;
-            font-size: 28px;
-            color: #000;
-        }
     }
+    .tabs-item {
+        // width: 110px;
+        text-align: center;
+        font-size: 28px;
+        color: #000;
+    }
+}
+.title{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    z-index: 99;
+}
