@@ -24,11 +24,11 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      //购物车
-      'pages/shopping/index',
+
       //首页
       'pages/index/index',
-
+      //购物车
+      'pages/shopping/index',
       //详情
       'pages/details/index',
       //我的

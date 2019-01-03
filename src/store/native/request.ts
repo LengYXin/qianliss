@@ -28,6 +28,9 @@ export class WXRequestClass {
         if (res && res.statusCode == 200) {
             return res.data;
         } else {
+            if (res.statusCode >= 500) {
+                Taro.showToast({ title: "连接超时", icon: "none", duration: 4000 })
+            }
             return {
                 isSuccess: false
             } as any
@@ -86,7 +89,7 @@ export class WXRequestClass {
     compatibleData(data) {
         Object.keys(data).map(x => {
             const val = data[x]
-            if (val == null || val == undefined ) {
+            if (val == null || val == undefined) {
                 delete data[x]
             }
         })

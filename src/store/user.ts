@@ -68,16 +68,21 @@ class User {
      * 微信用户信息
      * @param params 
      */
-    async  onGetUserInfo(params?: getUserInfo.Param) {
+    async  onGetUserInfo(params?: getUserInfo.Param, loading = false) {
         try {
+            if (loading) {
+                Taro.showLoading({ title: "加载中", mask: true })
+            }
             const res = await Taro.getUserInfo(params)
             runInAction(() => {
                 this.userInfoWX = JSON.parse(res.rawData)
                 this.authorized = true;
                 // this.isLogin = true;
             })
-            this.onLogin()
+            await this.onLogin();
+            Taro.hideLoading()
         } catch (error) {
+            Taro.hideLoading()
             console.error(error);
         }
     }
@@ -124,7 +129,7 @@ class User {
         if (res.isSuccess) {
             Taro.showToast({ title: "创建成功", icon: "none" });
             Taro.navigateBack();
-            this.onGetAddress();
+            // this.onGetAddress();
         } else {
             Taro.showToast({ title: res.message, icon: "none" });
         }
@@ -150,7 +155,7 @@ class User {
             }
             Taro.showToast({ title: "创建成功", icon: "none" });
             Taro.navigateBack();
-            this.onGetAddress();
+            // this.onGetAddress();
         } else {
             Taro.showToast({ title: res.message, icon: "none" });
         }

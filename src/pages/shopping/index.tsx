@@ -50,14 +50,14 @@ class Index extends Component {
     if (!UserStore.isLogin) {
       return Taro.showToast({ title: "请先登陆", icon: "none" })
     }
-    if (!UserStore.defaultAddress.contactMan) {
-      return Taro.showToast({ title: "请设置收货地址", icon: "none" })
-    }
     if (ShoppingStore.total <= 0) {
       return Taro.showToast({ title: "购物车没有商品", icon: "none" })
     }
     if (ShoppingStore.dataList.filter(x => x.select).length <= 0) {
       return Taro.showToast({ title: "未选择结算商品", icon: "none" })
+    }
+    if (!UserStore.defaultAddress.contactMan) {
+      return Taro.showToast({ title: "请设置收货地址", icon: "none" })
     }
     ShoppingStore.onSettlement(coupon)
   }
@@ -84,7 +84,7 @@ class Index extends Component {
       <View className='index'>
         <AtList>
           {isLogin ? <Navigator url="/pages/user_address/index">
-            <AtListItem className="address-item" title={'收件人：' + address.contactMan} arrow='right' />
+            <AtListItem className="address-item" title={'收件人：' + (address.contactMan||'未设置')} arrow='right' />
           </Navigator> : <Navigator className="address-item" openType="switchTab" url="/pages/user/index">
               <AtListItem title='请登录' arrow='right' />
             </Navigator>}

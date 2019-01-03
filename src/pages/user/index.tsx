@@ -38,7 +38,7 @@ class Index extends Component {
 
   componentDidHide() { }
   onLogin() {
-    UserStore.onGetUserInfo()
+    UserStore.onGetUserInfo({}, true)
   }
   makePhoneCall() {
     Taro.makePhoneCall({

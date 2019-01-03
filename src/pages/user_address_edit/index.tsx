@@ -38,8 +38,8 @@ class Index extends Component {
     if (e.detail.value.contactMan == "" || e.detail.value.contactMan == null) {
       return Taro.showToast({ title: "请输入收货人姓名", icon: "none" })
     }
-    if (e.detail.value.contactPhone == "" || e.detail.value.contactPhone == null) {
-      return Taro.showToast({ title: "请输入联系电话", icon: "none" })
+    if (!(/^1[34578]\d{9}$/.test(e.detail.value.contactPhone))) {
+      return Taro.showToast({ title: "请输入正确的联系电话", icon: "none" })
     }
     if (e.detail.value.fullValue == "" || e.detail.value.fullValue == null) {
       return Taro.showToast({ title: "请输入详细地址", icon: "none" })

@@ -33,12 +33,14 @@ class Index extends Component {
     CommodityStore.Paging.getPagingData()
   }
   componentWillMount() {
-   
+
   }
   componentWillReact() {
   }
 
-  componentDidMount() { }
+  componentDidMount() {
+    Taro.showShareMenu({ withShareTicket: true })
+  }
 
   componentWillUnmount() { }
 

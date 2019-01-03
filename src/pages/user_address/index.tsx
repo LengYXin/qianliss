@@ -31,7 +31,11 @@ class Index extends Component {
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  async componentDidShow() {
+    Taro.showLoading({ title: "加载中", mask: true })
+    await UserStore.onGetAddress()
+    Taro.hideLoading()
+  }
 
   componentDidHide() { }
   handleClick(e) {
@@ -63,31 +67,31 @@ class Index extends Component {
         <View className="edit-line"></View>
         {address.map((x, num) => {
           return <View key={num}>
-            <AtSwipeAction onClick={this.handleClick.bind(this, num)} onOpened={this.onClickBgColor.bind(this, num)} onClosed={this.onClickBgColor.bind(this, num)} options={[
+            {/* <AtSwipeAction onClick={this.handleClick.bind(this, num)} onOpened={this.onClickBgColor.bind(this, num)} onClosed={this.onClickBgColor.bind(this, num)} options={[
               {
                 text: '删除',
                 style: {
                   backgroundColor: '#FF4949'
                 }
               }
-            ]}>
-              <View className='edit-list'>
-                <View className="list-left" onClick={this.onClickRadio.bind(this, num)}>
-                  {x.isDefault || defaultAddress.id == x.id ? <Image className='ridio-yes' src={select} /> : <View className="left-ridio"></View>}
-                  <View className="left-box">
-                    <View className="box-name">{x.contactMan}<View className="phone">{x.contactPhone}</View></View>
-                    <View className="box-add">{x.fullValue}</View>
-                  </View>
-                </View>
-
-                <View className={`list-right ${this.state.editBgColor && this.state.editIndex == num ? "right-color" : ""}`}>
-                  <Navigator url={`/pages/user_address_edit/index?key=${num}`}>
-                    <Image className="right-img" src={edit} />
-                  </Navigator>
+            ]}> */}
+            <View className='edit-list'>
+              <View className="list-left" onClick={this.onClickRadio.bind(this, num)}>
+                {x.isDefault || defaultAddress.id == x.id ? <Image className='ridio-yes' src={select} /> : <View className="left-ridio"></View>}
+                <View className="left-box">
+                  <View className="box-name">{x.contactMan}<View className="phone">{x.contactPhone}</View></View>
+                  <View className="box-add">{x.fullValue}</View>
                 </View>
               </View>
 
-            </AtSwipeAction>
+              <View className={`list-right ${this.state.editBgColor && this.state.editIndex == num ? "right-color" : ""}`}>
+                <Navigator url={`/pages/user_address_edit/index?key=${num}`}>
+                  <Image className="right-img" src={edit} />
+                </Navigator>
+              </View>
+            </View>
+
+            {/* </AtSwipeAction> */}
             <View className="edit-line"></View>
           </View>
         })}

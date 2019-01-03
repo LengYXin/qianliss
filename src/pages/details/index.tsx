@@ -29,7 +29,7 @@ class Index extends Component {
   }
 
   async componentDidMount() {
-
+    Taro.showShareMenu({ withShareTicket: true })
     await CommodityStore.onGetSkuDetail(this.$router.params.id);
     Taro.hideLoading()
   }
