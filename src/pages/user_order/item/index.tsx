@@ -1,4 +1,4 @@
-import { Button, Image, View } from '@tarojs/components';
+import { Button, Image, View, Navigator } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component } from '@tarojs/taro';
 import { OrderStore } from '../../../store';
@@ -26,6 +26,13 @@ class Index extends Component<{ data: any }, any> {
     onReceiveSaleBill() {
         OrderStore.onReceiveSaleBill(this.props.data.id)
     }
+    onShow(data) {
+        Taro.showModal({
+            title: data.text,
+            content: `单价：￥${data.amount.toFixed(2)} 购买数量：${data.count}`,
+            showCancel:false
+        })
+    }
     status = {
         190100: '待支付',
         190101: '待发货',
@@ -50,7 +57,10 @@ class Index extends Component<{ data: any }, any> {
                     </View>
                     <View className="content">
                         {skus.map((x, i) => {
-                            return <Image key={i} className="content-img" src={x.thumbUrl} />
+                            return <Image onClick={this.onShow.bind(this, x)} className="content-img" key={x.id} src={x.thumbUrl} />
+                            // return <Navigator className="content-img"  url={'/pages/details/index?id=' + x.id} key={x.id}>
+                            //     <Image key={i} src={x.thumbUrl} />
+                            // </Navigator>
                         })}
                     </View>
                     <View className="commodity">

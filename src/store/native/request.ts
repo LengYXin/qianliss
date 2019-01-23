@@ -26,6 +26,9 @@ export class WXRequestClass {
         params.url = this.compatibleUrl(this.address, params.url);
         const res = await Taro.request(params);
         if (res && res.statusCode == 200) {
+            if (!res.data.isSuccess) {
+                Taro.showToast({ title: res.data.message, icon: "none", duration: 4000 })
+            }
             return res.data;
         } else {
             if (res.statusCode >= 500) {

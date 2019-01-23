@@ -43,7 +43,11 @@ class Index extends Component {
   componentDidHide() { }
   onSetShopping() {
     const { details } = CommodityStore;
-    ShoppingStore.onSetShopping({ count: 1, select: true, ...details })
+    if (details.id) {
+      ShoppingStore.onSetShopping({ count: 1, select: true, ...details })
+    } else {
+      Taro.showToast({ title: "商品信息出错", icon: "none" })
+    }
   }
   render() {
     const { details } = CommodityStore;

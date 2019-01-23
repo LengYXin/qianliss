@@ -62,10 +62,11 @@ class Index extends Component {
   render() {
     // const data = ["1", "2", "3", "4"]
     const { address, defaultAddress } = UserStore;
+    const dataList = [...address]
     return (
       <View className='address_edit'>
         <View className="edit-line"></View>
-        {address.map((x, num) => {
+        {dataList.map((x, num) => {
           return <View key={num}>
             {/* <AtSwipeAction onClick={this.handleClick.bind(this, num)} onOpened={this.onClickBgColor.bind(this, num)} onClosed={this.onClickBgColor.bind(this, num)} options={[
               {
