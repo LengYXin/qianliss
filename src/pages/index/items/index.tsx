@@ -1,9 +1,9 @@
-import { Image, Text, View, Navigator } from '@tarojs/components';
+import { Image, Text, View, Navigator, Button } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import Taro, { Component } from '@tarojs/taro';
 import { AtTag } from 'taro-ui';
 import Loading from '../../../components/loading';
-import { CommodityStore } from '../../../store';
+import { CommodityStore, ShoppingStore } from '../../../store';
 import './index.less';
 @observer
 class Index extends Component {
@@ -16,6 +16,15 @@ class Index extends Component {
   componentDidShow() { }
 
   componentDidHide() { }
+  onSetShopping(data, event) {
+    event.stopPropagation()
+    event.preventDefault()
+    if (data.id) {
+      ShoppingStore.onSetShopping(data)
+    } else {
+      Taro.showToast({ title: "商品信息出错", icon: "none" })
+    }
+  }
   render() {
     const PagingData = [...CommodityStore.Paging.PagingData];
     const loadingVis = CommodityStore.Paging.PagingLoading;
@@ -39,7 +48,10 @@ class Index extends Component {
                     <Text>￥{price} </Text> <Text className='origPrice'>￥{origPrice}</Text>
                   </View>
                   <View className="data-tag">
-                    <AtTag size='small'>{tag}</AtTag>
+                    <AtTag size='small'>{tag}</AtTag><Text className='stock-count'>(库存{data.stock && data.stock.count})</Text>
+                    <View className="shopping-btn">
+                      <Button onClick={this.onSetShopping.bind(this, data)}>加入购物车</Button>
+                    </View>
                   </View>
                 </View>
               </View>

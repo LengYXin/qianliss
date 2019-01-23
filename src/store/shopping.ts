@@ -57,20 +57,29 @@ class Shopping {
     /** 加入购物车 */
     @action.bound
     onSetShopping(data) {
-        const comm = find(this.dataList, ['id', data.id])
-        if (comm) {
-            comm.number += data.number;
+        if (data.stock && data.stock.count > 0) {
+            const comm = find(this.dataList, ['id', data.id])
+            if (comm) {
+                comm.number += data.number;
+            } else {
+                this.dataList.push({ count: 1, select: true, ...data });
+            }
+            this.onUpdateDataList(this.dataList.slice());
+            Taro.showToast({ title: "已加入购物车", icon: "none" })
         } else {
-            this.dataList.push(data);
+            Taro.showToast({ title: "库存不足", icon: "none" })
         }
-        this.onUpdateDataList(this.dataList.slice());
-        Taro.showToast({ title: "已加入购物车", icon: "none" })
     }
     /** 修改价格 */
     @action.bound
     onUpdateCount(index, count) {
-        this.dataList[index].count = count;
-        this.onUpdateDataList(this.dataList.slice());
+        const data = this.dataList[index];
+        if (data.stock && data.stock.count > count) {
+            this.dataList[index].count = count;
+            this.onUpdateDataList(this.dataList.slice());
+        } else {
+            Taro.showToast({ title: "库存不足", icon: "none" })
+        }
     }
     /** 修改选择状态 */
     @action.bound

@@ -44,14 +44,14 @@ class Index extends Component {
   onSetShopping() {
     const { details } = CommodityStore;
     if (details.id) {
-      ShoppingStore.onSetShopping({ count: 1, select: true, ...details })
+      ShoppingStore.onSetShopping(details)
     } else {
       Taro.showToast({ title: "商品信息出错", icon: "none" })
     }
   }
   render() {
     const { details } = CommodityStore;
-    let { text, price, origPrice, description, categoryText, thumbUrl, categoryId } = details;
+    let { text, price, origPrice, description, categoryText, thumbUrl, categoryId,stock} = details;
     const { total } = ShoppingStore;
     const tag = CommodityStore.onGetTabText(categoryId);
     price = parseFloat(price).toFixed(2);
@@ -76,6 +76,7 @@ class Index extends Component {
         <View className="at-row">
           <View className="at-col row-text">
             <Text>{text}</Text> <AtTag size='small'>{tag}</AtTag>
+            <View className="stock-count">(库存{stock && stock.count})</View> 
           </View>
           <View className="at-col row-price">
             <View className="price">￥{price} </View>
